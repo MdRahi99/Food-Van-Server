@@ -17,6 +17,24 @@ router.get('/products', async (req, res) => {
     }
 });
 
+// Get a single product by ID
+router.get('/products/:productId', async (req, res) => {
+    try {
+        const productId = req.params.productId;
+
+        const product = await FoodItems.findById(productId);
+
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not found.' });
+        }
+
+        res.json({ success: true, message: 'Product retrieved successfully.', data: product });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
+
 // Route to add a new product
 router.post('/products', async (req, res) => {
     const { Name, Price, ImageUrl, IsPopular, IsRecommended } = req.body;
