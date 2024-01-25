@@ -8,33 +8,14 @@
   ],
   "routes": [
     {
-      "src": "/api/products",
-      "dest": "/api",
-      "methods": ["GET"]
-    },
-    {
-      "src": "/api/products/:productId",
-      "dest": "/api",
-      "methods": ["GET"]
-    },
-    {
-      "src": "/api/products",
-      "dest": "/api",
-      "methods": ["POST"]
-    },
-    {
-      "src": "/api/products/:productId",
-      "dest": "/api",
-      "methods": ["PUT"]
-    },
-    {
-      "src": "/api/products/:id",
-      "dest": "/api",
-      "methods": ["DELETE"]
+      "src": "/api/(.*)",
+      "dest": "/api/$1",
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
     },
     {
       "src": "/(.*)",
-      "dest": "/"
+      "dest": "/$1",
+      "methods": ["GET", "OPTIONS"]
     }
   ]
 }
