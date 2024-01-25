@@ -37,11 +37,11 @@ router.get('/products/:productId', async (req, res) => {
 
 // Route to add a new product
 router.post('/products', async (req, res) => {
-    const { Name, Price, ImageUrl, IsPopular, IsRecommended } = req.body;
+    const { Name, Price, ImageUrl, Description, Category, Rating, IsPopular, IsRecommended } = req.body;
 
     try {
         // Validate request body
-        if (!Name || typeof Price !== 'number' || !ImageUrl || typeof IsPopular !== 'boolean' || typeof IsRecommended !== 'boolean') {
+        if (!Name || typeof Price !== 'number' || !ImageUrl || !Description || !Category || typeof Rating !== 'number' || typeof IsPopular !== 'boolean' || typeof IsRecommended !== 'boolean') {
             return res.status(400).json({ success: false, message: 'Invalid request body. Make sure all required fields are provided and have correct data types.' });
         }
 
@@ -49,6 +49,9 @@ router.post('/products', async (req, res) => {
             Name,
             Price,
             ImageUrl,
+            Description, 
+            Category, 
+            Rating,
             IsPopular,
             IsRecommended,
         });
@@ -57,6 +60,33 @@ router.post('/products', async (req, res) => {
         const savedProduct = await newProduct.save();
 
         res.status(201).json({ success: true, message: 'Product added successfully.', data: savedProduct });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
+
+// Update a single product by ID
+router.put('/products/:productId', async (req, res) => {
+    try {
+        const productId = req.params.productId;
+        const updateData = req.body;
+
+        // Check if the product exists
+        const existingProduct = await FoodItems.findById(productId);
+
+        if (!existingProduct) {
+            return res.status(404).json({ success: false, message: 'Product not found.' });
+        }
+
+        // Update the product
+        const updatedProduct = await FoodItems.findByIdAndUpdate(
+            productId,
+            updateData,
+            { new: true, runValidators: true }
+        );
+
+        res.json({ success: true, message: 'Product updated successfully.', data: updatedProduct });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
