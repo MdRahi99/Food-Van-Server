@@ -1,22 +1,26 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "./server.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/api/(.*)",
-        "dest": "/Controller/itemsController.js",
-        "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/server.js",
-        "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-      }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [
+    {
+      "src": "./server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/products",
+      "dest": "/Controller/itemsController.js",
+      "methods": ["GET", "POST", "PUT", "DELETE"]
+    },
+    {
+      "src": "/api/products/:productId",
+      "dest": "/Controller/itemsController.js",
+      "methods": ["GET", "PUT"]
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/server.js",
+      "methods": ["GET"]
+    }
+  ]
+}
